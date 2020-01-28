@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+  nginx:
+    build:
+      context: Docker/nginx/
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - 3000:3000
+  api:
+    build:
+      context: .
+      dockerfile: Docker/nodejs/Dockerfile
+    container_name: api
