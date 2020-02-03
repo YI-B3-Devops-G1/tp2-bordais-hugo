@@ -1,15 +1,19 @@
 const express = require('express');
 const app = express();
 
-const path = __dirname + '/views/';
 const port = 8080;
 
-app.get('/', function (req, res) {
-    res.json("Hello World");
+app.get('/', function(req,res){
+    res.json({message:"Hello World"});
 });
 
-/*router.get('/status', function(req,res){
-  res.sendFile();
-});*/
+app.get('/status', function(req,res){
+    res.json({
+        "status": "OK",
+        "postgresUptime": String,
+        "redisConnectedClients": Number
+    });
+});
+
 
 app.listen(port)

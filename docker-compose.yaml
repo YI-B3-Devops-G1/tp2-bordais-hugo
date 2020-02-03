@@ -1,14 +1,49 @@
-version: '3.2'
+version: "3.1"
 services:
   nginx:
     build:
-      context: Docker/nginx/
+      context: ./nginx
       dockerfile: Dockerfile
+    depends_on:
+      - api
     container_name: nginx
     ports:
       - 3000:3000
+
+
   api:
     build:
       context: .
-      dockerfile: Docker/nodejs/Dockerfile
+      dockerfile: Dockerfile
     container_name: api
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - API_PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=admin
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - REDIS_HOST=redis
+    restart: on-failure
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    depends_on:
+      - redis
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+      PGDATA: /data/postgres
+    restart: on-failure
+
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: on-failure
